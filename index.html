@@ -409,15 +409,16 @@ localsvgEl.addEventListener('click', e => {
   const g = e.target.closest('.lmpin');
   if (!g) return;
   const lat = g.getAttribute('data-lat'), lng = g.getAttribute('data-lng');
-  const label = encodeURIComponent(g.getAttribute('data-name') || '');
-  const ua = navigator.userAgent || '';
-  if (/iPad|iPhone|iPod/.test(ua)) {
-    window.location.href = `maps://?ll=${lat},${lng}&q=${label}`;
-  } else if (/Android/.test(ua)) {
-    window.location.href = `geo:${lat},${lng}?q=${lat},${lng}(${label})`;
-  } else {
-    window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
-  }
+  // Universal https Maps link via an anchor click: custom schemes (geo:/maps:)
+  // are a no-op from an installed standalone PWA on Android; an https link
+  // launches the Maps app (or browser) reliably everywhere.
+  const a = document.createElement('a');
+  a.href = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 });
 document.getElementById('lm-back').addEventListener('click', showIndex);
 
