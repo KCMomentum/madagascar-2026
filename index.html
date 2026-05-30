@@ -136,6 +136,19 @@
   .infobtn.pack { background:#e6f0e0; border-color:#8fae72; }
   .infobtn.pack:hover { background:#dbe9d2; border-color:#7c9c5e; }
   .foot { margin-top:18px; font-size:11.5px; color:#8a7650; font-style:italic; }
+  #localwrap { display:none; }
+  #localsvg { width:100%; height:auto; display:block; border:2px solid var(--ink);
+    border-radius:10px; background:#cdba8e; }
+  .lm-back {
+    display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-weight:600;
+    font-size:13.5px; color:var(--ink); background:#fff8; border:1px solid #0002;
+    border-radius:8px; padding:6px 11px; margin:0 0 10px; font-family:inherit;
+  }
+  .lm-back:hover { background:#fff; }
+  .lm-head { font-family:Georgia,serif; font-weight:bold; font-size:18px; margin:0 0 8px; }
+  .lm-foot { font-size:11.5px; color:#5a4a2c; font-style:italic; margin:8px 0 0; }
+  #localsvg .lmpin { cursor:pointer; }
+  #localsvg .lmpin:hover .lmdot { stroke:#fff; stroke-width:2.5; }
   @media (max-width:780px) {
     .wrap { grid-template-columns:1fr; }
     .panel { position:static; max-height:none; border-left:none; border-top:2px solid var(--ink); }
@@ -145,7 +158,7 @@
 <body>
 <div class="wrap">
   <div class="mapcol">
-    <svg id="mapsvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1050" font-family="Helvetica, Arial, sans-serif">
+    <div id="natmap"><svg id="mapsvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1050" font-family="Helvetica, Arial, sans-serif">
 <defs>
 <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cbe8ee"/><stop offset="1" stop-color="#a9d4dd"/></linearGradient>
 </defs>
@@ -199,7 +212,13 @@
 <polygon points="95.0,850.0 103.9,871.1 125.0,880.0 103.9,888.9 95.0,910.0 86.1,888.9 65.0,880.0 86.1,871.1" fill="#43301c" stroke="#43301c" stroke-width="1" stroke-linejoin="round"/>
 <polygon points="95,850 90.2,880.0 95,880.0" fill="#b3261e"/>
 <text x="95" y="840" font-size="14" font-weight="bold" fill="#43301c" text-anchor="middle" font-family="Georgia, serif">N</text>
-</svg>
+</svg></div>
+    <div id="localwrap">
+      <button class="lm-back" id="lm-back">&#8592; landkaart</button>
+      <p class="lm-head" id="lm-head"></p>
+      <svg id="localsvg" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg"></svg>
+      <p class="lm-foot">Tik een pin om in Google Maps te openen · posities zijn indicatief</p>
+    </div>
   </div>
   <aside class="panel">
     <h1 class="ptitle">Madagascar 2026</h1>
@@ -279,7 +298,7 @@
 </div>
 
 <script>
-const STOPS = [{"id": "tana", "marker": "T", "name": "Antananarivo (Tana)", "dates": "28 jun (aankomst 15:50) · 6 jul (doorreis) · 16–19 jul (eindbuffer)", "hotel": "Homestay Chez Jeanne", "hotel_note": "Vlak bij de luchthaven — handig voor late aankomst en vroege binnenlandse vluchten.", "activities": ["Aankomst & acclimatiseren na de internationale vlucht", "Eindbuffer 16–19 jul: marge voor vertraging binnenlandse vluchten (Rova-paleis, markten)"], "transport_in": "Internationale vlucht AMS → NBO → Tana (aankomst 28 jun 15:50)", "tip": "Visum bij aankomst: €35 p.p. contant (e-Visum werkt niet). Zorg dat je cash euro's bij de hand hebt vóór de paspoortcontrole.", "lat": -18.91, "lon": 47.52, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-10,9 Q0,2.5 10,9 Z\" fill=\"#9a8a5a\"/><rect x=\"-8\" y=\"0.5\" width=\"4\" height=\"5\" fill=\"#a06a44\"/><rect x=\"4\" y=\"-0.5\" width=\"4\" height=\"6\" fill=\"#a06a44\"/><rect x=\"-3\" y=\"-3.5\" width=\"6\" height=\"9\" fill=\"#8a5a3a\"/><polygon points=\"-4,-3.5 0,-8.5 4,-3.5\" fill=\"#5b3a22\"/></svg>", "kind": "hub", "nights": 5, "region": "hub"}, {"id": "morondava", "marker": "1", "name": "Morondava", "dates": "29 jun (rustdag) · 3 jul (terug)", "hotel": "Hotel Trecicogne", "hotel_note": "Uitvalsbasis voor de Avenue des Baobabs en de Tsingy-lus.", "activities": ["Avenue des Baobabs bij zonsopkomst (rustiger) én zonsondergang", "Le Mad Zebu — lunchstop in Belo sur Tsiribihina onderweg"], "transport_in": "Binnenlandse vlucht Tana → Morondava (29 jun 08:00–09:10)", "tip": "", "lat": -20.28, "lon": 44.28, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-3.2,9 C-4.6,3 -2.2,1.5 -1.9,-2.5 L1.9,-2.5 C2.2,1.5 4.6,3 3.2,9 Z\" fill=\"#7a5a36\"/><g stroke=\"#7a5a36\" stroke-width=\"1.5\" stroke-linecap=\"round\" fill=\"none\"><path d=\"M-1.6,-2.5 L-5.2,-7\"/><path d=\"M-0.6,-2.5 L-2,-8.6\"/><path d=\"M0.6,-2.5 L1.6,-8.2\"/><path d=\"M1.7,-2.5 L5.2,-6.6\"/><path d=\"M-3.4,-5 L-6.4,-6.2\"/><path d=\"M3.4,-5 L6.4,-6.2\"/></g></svg>", "kind": "node", "nights": 2, "region": "west"}, {"id": "bekopaka", "marker": "2", "name": "Tsingy de Bemaraha (Bekopaka)", "dates": "30 jun – 2 jul", "hotel": "Hotel Orchidée du Bemaraha", "hotel_note": "Basis voor de twee Tsingy-wandelingen.", "activities": ["Petit Tsingy — wandeling door de kleinere rotsformaties", "Grande Tsingy — volle dag, hangbruggen en klimroutes (lokale gidsen niet inbegrepen)"], "transport_in": "4x4 vanaf Morondava via Belo sur Tsiribihina (~10 u, rivierponten)", "tip": "De twee Tsingy-dagen zijn omwisselbaar — bij vermoeidheid na de lange rit eerst de Petit. Een kort boottochtje op de Manambolo-rivier stelt weinig voor; alleen de moeite als je een halve dag vaart (terplekke met de chauffeur doorspreken).", "lat": -19.14, "lon": 44.82, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><polygon points=\"-9,8 -6.6,-2 -4.6,8 -2.6,-6 -0.3,8 1.9,-3 3.9,8 6.1,-7 9,8\" fill=\"#9b9aa1\" stroke=\"#5d5c64\" stroke-width=\"0.8\" stroke-linejoin=\"round\"/></svg>", "kind": "node", "nights": 3, "region": "west"}, {"id": "miandri", "marker": "3", "name": "Miandrivazo", "dates": "4 jul", "hotel": "Hotel Lakana", "hotel_note": "Tussenstop tussen de westkust en het hoogland.", "activities": ["Tsiribihina-rivier en hooglandlandschap onderweg"], "transport_in": "4x4 vanaf Morondava (~5 u)", "tip": "", "lat": -19.53, "lon": 45.47, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><g stroke=\"#3b86b8\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\"><path d=\"M-9,4.5 q2,-2 4,0 t4,0 t4,0 t4,0\"/><path d=\"M-9,7.8 q2,-2 4,0 t4,0 t4,0 t4,0\"/></g><path d=\"M-6,0 q6,4 12,0 l-1.6,2.6 q-4.4,2.4 -8.8,0 Z\" fill=\"#7a5a36\"/><line x1=\"2\" y1=\"0.6\" x2=\"2\" y2=\"-6\" stroke=\"#43301c\" stroke-width=\"1\"/></svg>", "kind": "node", "nights": 1, "region": "hoogland"}, {"id": "antsirabe", "marker": "4", "name": "Antsirabe", "dates": "5 jul", "hotel": "Hotel Vatolahy", "hotel_note": "Koloniale hooglandstad, bekend om de pousse-pousse.", "activities": ["Fietstocht, markt en pousse-pousse door de stad", "Kratermeren Tritriva en Andraikiba"], "transport_in": "4x4 vanaf Miandrivazo (~5 u)", "tip": "", "lat": -19.87, "lon": 47.03, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><g stroke=\"#43301c\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\"><circle cx=\"2.6\" cy=\"4.4\" r=\"3.3\"/><path d=\"M-6.6,4.4 L-6.6,-2 L1.6,-2\"/><path d=\"M-6.6,-2 q4.2,-7 8.4,-0.6\"/><path d=\"M-6.6,1 L-9.6,-2.6\"/></g><circle cx=\"2.6\" cy=\"4.4\" r=\"0.9\" fill=\"#43301c\"/></svg>", "kind": "node", "nights": 1, "region": "hoogland"}, {"id": "andasibe", "marker": "5", "name": "Andasibe – Perinet NP", "dates": "7–8 jul", "hotel": "Feon'ny Ala", "hotel_note": "Lodge aan de rand van het park, 's nachts hoor je de Indri.", "activities": ["Perinet / Mantadia NP — Indri-indri en kameleons", "Pereyras reptielenfarm (~€8 p.p.)", "Mitsinjo nachtexcursie (~€10 p.p.)"], "transport_in": "4x4 vanaf Tana (~5,5 u, onderweg de reptielenfarm)", "tip": "", "lat": -18.93, "lon": 48.42, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><circle cx=\"-4.4\" cy=\"-4.8\" r=\"1.9\" fill=\"#7f858c\"/><circle cx=\"4.4\" cy=\"-4.8\" r=\"1.9\" fill=\"#7f858c\"/><circle r=\"6.2\" fill=\"#8a8f96\"/><ellipse cx=\"0\" cy=\"0.7\" rx=\"4.7\" ry=\"4.3\" fill=\"#f1efe9\"/><circle cx=\"-2.5\" cy=\"-0.5\" r=\"1.8\" fill=\"#3a2a1a\"/><circle cx=\"2.5\" cy=\"-0.5\" r=\"1.8\" fill=\"#3a2a1a\"/><circle cx=\"-1.9\" cy=\"-1.1\" r=\"0.6\" fill=\"#fff\"/><circle cx=\"3.1\" cy=\"-1.1\" r=\"0.6\" fill=\"#fff\"/><ellipse cx=\"0\" cy=\"2.4\" rx=\"1\" ry=\"0.8\" fill=\"#43301c\"/></svg>", "kind": "node", "nights": 2, "region": "oost"}, {"id": "palmarium", "marker": "6", "name": "Palmarium / Pangalanes", "dates": "9–10 jul", "hotel": "Bungalow Palmarium", "hotel_note": "Privéreservaat aan het Pangalanes-kanaal, alleen per boot bereikbaar.", "activities": ["Aye-Aye nachtexcursie naar Aye-Aye Island (~€10 p.p.) — bucketlist-dier, bijna gegarandeerd", "Reservaat verkennen — vrij rondlopende lemuren"], "transport_in": "4x4 + boot vanaf Andasibe (~5 u rijden + 1 u boot)", "tip": "", "lat": -18.95, "lon": 48.82, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M3.2,-7 A7,7 0 1,0 3.2,7 A5.3,5.3 0 1,1 3.2,-7 Z\" fill=\"#ecd680\"/><g fill=\"#ecd680\"><path d=\"M-5.5,-5 l0.7,1.7 1.7,0.7 -1.7,0.7 -0.7,1.7 -0.7,-1.7 -1.7,-0.7 1.7,-0.7 Z\"/><path d=\"M6,4.5 l0.5,1.2 1.2,0.5 -1.2,0.5 -0.5,1.2 -0.5,-1.2 -1.2,-0.5 1.2,-0.5 Z\"/></g></svg>", "kind": "node", "nights": 2, "region": "oost"}, {"id": "tamatave", "marker": "7", "name": "Tamatave (Toamasina)", "dates": "11 jul (doorreis)", "hotel": "Doorreis — geen overnachting", "hotel_note": "Overstappunt tussen het kanaal en de kustweg richting Mahambo.", "activities": ["Boottransfer over het Pangalanes-kanaal, daarna verder per 4x4"], "transport_in": "Boot vanaf Palmarium (~2,5 u)", "tip": "", "lat": -18.15, "lon": 49.4, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M0,3 L0,-8 L6,1 L0,1 Z\" fill=\"#f6ecd4\" stroke=\"#43301c\" stroke-width=\"0.8\"/><path d=\"M-8,3 Q0,8 8,3 L6,5.6 Q0,8.6 -6,5.6 Z\" fill=\"#2f6fd0\"/><line x1=\"0\" y1=\"3\" x2=\"0\" y2=\"-8\" stroke=\"#43301c\" stroke-width=\"1\"/></svg>", "kind": "node", "nights": 0, "region": "oost"}, {"id": "mahambo", "marker": "8", "name": "Mahambo", "dates": "11–12 jul", "hotel": "Hotel Le Pirogue", "hotel_note": "Kustdorp; extra overnachting omdat de boot naar Sainte-Marie alleen ma/wo/za vaart.", "activities": ["Strand en kustdorp — uitvalsbasis voor de oversteek naar Sainte-Marie"], "transport_in": "4x4 vanaf Tamatave", "tip": "", "lat": -17.49, "lon": 49.46, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-0.5,9 Q1.6,2 0.5,-3.6\" stroke=\"#7a5a36\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\"/><g stroke=\"#3f7d4a\" stroke-width=\"1.9\" fill=\"none\" stroke-linecap=\"round\"><path d=\"M0,-3.6 Q-6,-6 -9,-4\"/><path d=\"M0,-3.6 Q-5,-10 -8.6,-9.6\"/><path d=\"M0,-3.6 Q0,-10.4 0,-12\"/><path d=\"M0,-3.6 Q5,-10 8.6,-9.6\"/><path d=\"M0,-3.6 Q6,-6 9,-4\"/></g><circle cx=\"-1.4\" cy=\"-2.6\" r=\"1\" fill=\"#7a5a36\"/><circle cx=\"1.6\" cy=\"-2.4\" r=\"1\" fill=\"#7a5a36\"/></svg>", "kind": "node", "nights": 2, "region": "oost"}, {"id": "stemarie", "marker": "9", "name": "Ile Sainte-Marie", "dates": "13–16 jul (terugvlucht 16 jul 21:15)", "hotel": "Hotel Ravoraha", "hotel_note": "Aan zee, met zwembad.", "activities": ["Bultrugwalvissen — boottocht incl. lunch (~€65 p.p.), hét seizoen in juli", "Duiken / snorkelen bij scheepswrakken", "Piratenbegraafplaats en Captain Kidd-baai", "Mangrove-expeditie per pirogue", "Daguitstap naar Nosy Nato (Île aux Nattes)"], "transport_in": "Boot vanaf Mahambo (~4,5 u varen, vroege ochtend)", "tip": "Walvistocht NIET vooraf boeken — regel het via de hotelreceptie ter plaatse. Bij slecht weer gaat de boot niet, dus zo zit je nergens aan vast (~€65 p.p. incl. lunch).", "lat": -17.02, "lon": 49.85, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-9,1.5 Q-9,-4 -1,-4 Q6,-4 7.6,0.6 Q8,3.6 1,4 Q-9,5 -9,1.5 Z\" fill=\"#456a82\"/><path d=\"M7,0.6 L12,-3 L10.6,0.6 L12,4.2 Z\" fill=\"#456a82\"/><circle cx=\"-5.2\" cy=\"-0.6\" r=\"0.85\" fill=\"#fff\"/><g stroke=\"#8fbdd8\" stroke-width=\"1.2\" stroke-linecap=\"round\"><path d=\"M-4,-4 L-5.5,-8\"/><path d=\"M-4,-4 L-3,-8\"/><path d=\"M-4,-4 L-4.3,-8.6\"/></g></svg>", "kind": "node", "nights": 3, "region": "eiland"}];
+const STOPS = [{"id": "tana", "marker": "T", "name": "Antananarivo (Tana)", "dates": "28 jun (aankomst 15:50) · 6 jul (doorreis) · 16–19 jul (eindbuffer)", "hotel": "Homestay Chez Jeanne", "hotel_note": "Vlak bij de luchthaven — handig voor late aankomst en vroege binnenlandse vluchten.", "activities": ["Aankomst & acclimatiseren na de internationale vlucht", "Eindbuffer 16–19 jul: marge voor vertraging binnenlandse vluchten (Rova-paleis, markten)"], "transport_in": "Internationale vlucht AMS → NBO → Tana (aankomst 28 jun 15:50)", "tip": "Visum bij aankomst: €35 p.p. contant (e-Visum werkt niet). Zorg dat je cash euro's bij de hand hebt vóór de paspoortcontrole.", "lat": -18.91, "lon": 47.52, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-10,9 Q0,2.5 10,9 Z\" fill=\"#9a8a5a\"/><rect x=\"-8\" y=\"0.5\" width=\"4\" height=\"5\" fill=\"#a06a44\"/><rect x=\"4\" y=\"-0.5\" width=\"4\" height=\"6\" fill=\"#a06a44\"/><rect x=\"-3\" y=\"-3.5\" width=\"6\" height=\"9\" fill=\"#8a5a3a\"/><polygon points=\"-4,-3.5 0,-8.5 4,-3.5\" fill=\"#5b3a22\"/></svg>", "kind": "hub", "nights": 5, "region": "hub", "local": {"coast": "", "pins": [{"name": "Homestay Chez Jeanne", "x": 42, "y": 70, "hotel": true, "q": "Chez Jeanne Antananarivo Ivato"}, {"name": "Ivato luchthaven", "x": 22, "y": 46, "q": "Ivato International Airport Antananarivo"}, {"name": "Rova-paleis", "x": 68, "y": 28, "q": "Rova of Antananarivo"}, {"name": "Analakely-markt", "x": 60, "y": 56, "q": "Analakely Market Antananarivo"}]}}, {"id": "morondava", "marker": "1", "name": "Morondava", "dates": "29 jun (rustdag) · 3 jul (terug)", "hotel": "Hotel Trecicogne", "hotel_note": "Uitvalsbasis voor de Avenue des Baobabs en de Tsingy-lus.", "activities": ["Avenue des Baobabs bij zonsopkomst (rustiger) én zonsondergang", "Le Mad Zebu — lunchstop in Belo sur Tsiribihina onderweg"], "transport_in": "Binnenlandse vlucht Tana → Morondava (29 jun 08:00–09:10)", "tip": "", "lat": -20.28, "lon": 44.28, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-3.2,9 C-4.6,3 -2.2,1.5 -1.9,-2.5 L1.9,-2.5 C2.2,1.5 4.6,3 3.2,9 Z\" fill=\"#7a5a36\"/><g stroke=\"#7a5a36\" stroke-width=\"1.5\" stroke-linecap=\"round\" fill=\"none\"><path d=\"M-1.6,-2.5 L-5.2,-7\"/><path d=\"M-0.6,-2.5 L-2,-8.6\"/><path d=\"M0.6,-2.5 L1.6,-8.2\"/><path d=\"M1.7,-2.5 L5.2,-6.6\"/><path d=\"M-3.4,-5 L-6.4,-6.2\"/><path d=\"M3.4,-5 L6.4,-6.2\"/></g></svg>", "kind": "node", "nights": 2, "region": "west", "local": {"coast": "west", "pins": [{"name": "Hotel Trecicogne", "x": 30, "y": 66, "hotel": true, "q": "Hotel Trecicogne Morondava"}, {"name": "Strand Morondava", "x": 22, "y": 44, "q": "Morondava beach"}, {"name": "Avenue des Baobabs", "x": 68, "y": 34, "q": "Avenue of the Baobabs Morondava"}]}}, {"id": "bekopaka", "marker": "2", "name": "Tsingy de Bemaraha (Bekopaka)", "dates": "30 jun – 2 jul", "hotel": "Hotel Orchidée du Bemaraha", "hotel_note": "Basis voor de twee Tsingy-wandelingen.", "activities": ["Petit Tsingy — wandeling door de kleinere rotsformaties", "Grande Tsingy — volle dag, hangbruggen en klimroutes (lokale gidsen niet inbegrepen)"], "transport_in": "4x4 vanaf Morondava via Belo sur Tsiribihina (~10 u, rivierponten)", "tip": "De twee Tsingy-dagen zijn omwisselbaar — bij vermoeidheid na de lange rit eerst de Petit. Een kort boottochtje op de Manambolo-rivier stelt weinig voor; alleen de moeite als je een halve dag vaart (terplekke met de chauffeur doorspreken).", "lat": -19.14, "lon": 44.82, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><polygon points=\"-9,8 -6.6,-2 -4.6,8 -2.6,-6 -0.3,8 1.9,-3 3.9,8 6.1,-7 9,8\" fill=\"#9b9aa1\" stroke=\"#5d5c64\" stroke-width=\"0.8\" stroke-linejoin=\"round\"/></svg>", "kind": "node", "nights": 3, "region": "west", "local": {"coast": "", "pins": [{"name": "Hotel Orchidée du Bemaraha", "x": 52, "y": 82, "hotel": true, "q": "Hotel Orchidée du Bemaraha, Bekopaka"}, {"name": "Grande Tsingy", "x": 46, "y": 20, "q": "Grand Tsingy de Bemaraha"}, {"name": "Petit Tsingy", "x": 62, "y": 52, "q": "Petit Tsingy de Bemaraha"}, {"name": "Manambolo-rivier", "x": 24, "y": 64, "q": "Manambolo River Bekopaka"}]}}, {"id": "miandri", "marker": "3", "name": "Miandrivazo", "dates": "4 jul", "hotel": "Hotel Lakana", "hotel_note": "Tussenstop tussen de westkust en het hoogland.", "activities": ["Tsiribihina-rivier en hooglandlandschap onderweg"], "transport_in": "4x4 vanaf Morondava (~5 u)", "tip": "", "lat": -19.53, "lon": 45.47, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><g stroke=\"#3b86b8\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\"><path d=\"M-9,4.5 q2,-2 4,0 t4,0 t4,0 t4,0\"/><path d=\"M-9,7.8 q2,-2 4,0 t4,0 t4,0 t4,0\"/></g><path d=\"M-6,0 q6,4 12,0 l-1.6,2.6 q-4.4,2.4 -8.8,0 Z\" fill=\"#7a5a36\"/><line x1=\"2\" y1=\"0.6\" x2=\"2\" y2=\"-6\" stroke=\"#43301c\" stroke-width=\"1\"/></svg>", "kind": "node", "nights": 1, "region": "hoogland", "local": {"coast": "", "pins": [{"name": "Hotel Lakana", "x": 50, "y": 66, "hotel": true, "q": "Hotel Lakana Miandrivazo"}, {"name": "Tsiribihina-rivier", "x": 40, "y": 36, "q": "Tsiribihina River Miandrivazo"}, {"name": "Miandrivazo centrum", "x": 64, "y": 54, "q": "Miandrivazo"}]}}, {"id": "antsirabe", "marker": "4", "name": "Antsirabe", "dates": "5 jul", "hotel": "Hotel Vatolahy", "hotel_note": "Koloniale hooglandstad, bekend om de pousse-pousse.", "activities": ["Fietstocht, markt en pousse-pousse door de stad", "Kratermeren Tritriva en Andraikiba"], "transport_in": "4x4 vanaf Miandrivazo (~5 u)", "tip": "", "lat": -19.87, "lon": 47.03, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><g stroke=\"#43301c\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\"><circle cx=\"2.6\" cy=\"4.4\" r=\"3.3\"/><path d=\"M-6.6,4.4 L-6.6,-2 L1.6,-2\"/><path d=\"M-6.6,-2 q4.2,-7 8.4,-0.6\"/><path d=\"M-6.6,1 L-9.6,-2.6\"/></g><circle cx=\"2.6\" cy=\"4.4\" r=\"0.9\" fill=\"#43301c\"/></svg>", "kind": "node", "nights": 1, "region": "hoogland", "local": {"coast": "", "pins": [{"name": "Hotel Vatolahy", "x": 54, "y": 70, "hotel": true, "q": "Hotel Vatolahy Antsirabe"}, {"name": "Centrum & markt", "x": 60, "y": 50, "q": "Antsirabe market"}, {"name": "Lac Tritriva", "x": 28, "y": 30, "q": "Lake Tritriva"}, {"name": "Lac Andraikiba", "x": 40, "y": 58, "q": "Lake Andraikiba"}]}}, {"id": "andasibe", "marker": "5", "name": "Andasibe – Perinet NP", "dates": "7–8 jul", "hotel": "Feon'ny Ala", "hotel_note": "Lodge aan de rand van het park, 's nachts hoor je de Indri.", "activities": ["Perinet / Mantadia NP — Indri-indri en kameleons", "Pereyras reptielenfarm (~€8 p.p.)", "Mitsinjo nachtexcursie (~€10 p.p.)"], "transport_in": "4x4 vanaf Tana (~5,5 u, onderweg de reptielenfarm)", "tip": "", "lat": -18.93, "lon": 48.42, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><circle cx=\"-4.4\" cy=\"-4.8\" r=\"1.9\" fill=\"#7f858c\"/><circle cx=\"4.4\" cy=\"-4.8\" r=\"1.9\" fill=\"#7f858c\"/><circle r=\"6.2\" fill=\"#8a8f96\"/><ellipse cx=\"0\" cy=\"0.7\" rx=\"4.7\" ry=\"4.3\" fill=\"#f1efe9\"/><circle cx=\"-2.5\" cy=\"-0.5\" r=\"1.8\" fill=\"#3a2a1a\"/><circle cx=\"2.5\" cy=\"-0.5\" r=\"1.8\" fill=\"#3a2a1a\"/><circle cx=\"-1.9\" cy=\"-1.1\" r=\"0.6\" fill=\"#fff\"/><circle cx=\"3.1\" cy=\"-1.1\" r=\"0.6\" fill=\"#fff\"/><ellipse cx=\"0\" cy=\"2.4\" rx=\"1\" ry=\"0.8\" fill=\"#43301c\"/></svg>", "kind": "node", "nights": 2, "region": "oost", "local": {"coast": "", "pins": [{"name": "Feon'ny Ala", "x": 52, "y": 72, "hotel": true, "q": "Feon'ny Ala Andasibe"}, {"name": "Analamazaotra / Perinet", "x": 44, "y": 30, "q": "Analamazaotra Reserve Andasibe"}, {"name": "Mantadia NP", "x": 58, "y": 16, "q": "Mantadia National Park"}, {"name": "Mitsinjo", "x": 66, "y": 52, "q": "Association Mitsinjo Andasibe"}, {"name": "Pereyras reptielenfarm", "x": 24, "y": 60, "q": "Peyrieras Reptile Reserve Marozevo"}]}}, {"id": "palmarium", "marker": "6", "name": "Palmarium / Pangalanes", "dates": "9–10 jul", "hotel": "Bungalow Palmarium", "hotel_note": "Privéreservaat aan het Pangalanes-kanaal, alleen per boot bereikbaar.", "activities": ["Aye-Aye nachtexcursie naar Aye-Aye Island (~€10 p.p.) — bucketlist-dier, bijna gegarandeerd", "Reservaat verkennen — vrij rondlopende lemuren"], "transport_in": "4x4 + boot vanaf Andasibe (~5 u rijden + 1 u boot)", "tip": "", "lat": -18.95, "lon": 48.82, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M3.2,-7 A7,7 0 1,0 3.2,7 A5.3,5.3 0 1,1 3.2,-7 Z\" fill=\"#ecd680\"/><g fill=\"#ecd680\"><path d=\"M-5.5,-5 l0.7,1.7 1.7,0.7 -1.7,0.7 -0.7,1.7 -0.7,-1.7 -1.7,-0.7 1.7,-0.7 Z\"/><path d=\"M6,4.5 l0.5,1.2 1.2,0.5 -1.2,0.5 -0.5,1.2 -0.5,-1.2 -1.2,-0.5 1.2,-0.5 Z\"/></g></svg>", "kind": "node", "nights": 2, "region": "oost", "local": {"coast": "east", "pins": [{"name": "Bungalow Palmarium", "x": 42, "y": 60, "hotel": true, "q": "Palmarium Reserve Ankanin'ny Nofy"}, {"name": "Aye-Aye Island", "x": 76, "y": 40, "q": "Aye-Aye Island Palmarium"}, {"name": "Reservaat", "x": 40, "y": 32, "q": "Palmarium Reserve"}]}}, {"id": "tamatave", "marker": "7", "name": "Tamatave (Toamasina)", "dates": "11 jul (doorreis)", "hotel": "Doorreis — geen overnachting", "hotel_note": "Overstappunt tussen het kanaal en de kustweg richting Mahambo.", "activities": ["Boottransfer over het Pangalanes-kanaal, daarna verder per 4x4"], "transport_in": "Boot vanaf Palmarium (~2,5 u)", "tip": "", "lat": -18.15, "lon": 49.4, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M0,3 L0,-8 L6,1 L0,1 Z\" fill=\"#f6ecd4\" stroke=\"#43301c\" stroke-width=\"0.8\"/><path d=\"M-8,3 Q0,8 8,3 L6,5.6 Q0,8.6 -6,5.6 Z\" fill=\"#2f6fd0\"/><line x1=\"0\" y1=\"3\" x2=\"0\" y2=\"-8\" stroke=\"#43301c\" stroke-width=\"1\"/></svg>", "kind": "node", "nights": 0, "region": "oost", "local": {"coast": "east", "pins": [{"name": "Pangalanes-kanaal", "x": 40, "y": 40, "q": "Canal des Pangalanes Toamasina"}, {"name": "Tamatave haven", "x": 58, "y": 58, "q": "Toamasina port"}, {"name": "Kustweg richting Mahambo", "x": 66, "y": 26, "q": "RN5 Toamasina"}]}}, {"id": "mahambo", "marker": "8", "name": "Mahambo", "dates": "11–12 jul", "hotel": "Hotel Le Pirogue", "hotel_note": "Kustdorp; extra overnachting omdat de boot naar Sainte-Marie alleen ma/wo/za vaart.", "activities": ["Strand en kustdorp — uitvalsbasis voor de oversteek naar Sainte-Marie"], "transport_in": "4x4 vanaf Tamatave", "tip": "", "lat": -17.49, "lon": 49.46, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-0.5,9 Q1.6,2 0.5,-3.6\" stroke=\"#7a5a36\" stroke-width=\"2.3\" fill=\"none\" stroke-linecap=\"round\"/><g stroke=\"#3f7d4a\" stroke-width=\"1.9\" fill=\"none\" stroke-linecap=\"round\"><path d=\"M0,-3.6 Q-6,-6 -9,-4\"/><path d=\"M0,-3.6 Q-5,-10 -8.6,-9.6\"/><path d=\"M0,-3.6 Q0,-10.4 0,-12\"/><path d=\"M0,-3.6 Q5,-10 8.6,-9.6\"/><path d=\"M0,-3.6 Q6,-6 9,-4\"/></g><circle cx=\"-1.4\" cy=\"-2.6\" r=\"1\" fill=\"#7a5a36\"/><circle cx=\"1.6\" cy=\"-2.4\" r=\"1\" fill=\"#7a5a36\"/></svg>", "kind": "node", "nights": 2, "region": "oost", "local": {"coast": "east", "pins": [{"name": "Hotel Le Pirogue", "x": 40, "y": 58, "hotel": true, "q": "La Pirogue Mahambo"}, {"name": "Strand Mahambo", "x": 30, "y": 40, "q": "Mahambo beach"}, {"name": "Boot naar Sainte-Marie", "x": 58, "y": 66, "q": "Mahambo"}]}}, {"id": "stemarie", "marker": "9", "name": "Ile Sainte-Marie", "dates": "13–16 jul (terugvlucht 16 jul 21:15)", "hotel": "Hotel Ravoraha", "hotel_note": "Aan zee, met zwembad.", "activities": ["Bultrugwalvissen — boottocht incl. lunch (~€65 p.p.), hét seizoen in juli", "Duiken / snorkelen bij scheepswrakken", "Piratenbegraafplaats en Captain Kidd-baai", "Mangrove-expeditie per pirogue", "Daguitstap naar Nosy Nato (Île aux Nattes)"], "transport_in": "Boot vanaf Mahambo (~4,5 u varen, vroege ochtend)", "tip": "Walvistocht NIET vooraf boeken — regel het via de hotelreceptie ter plaatse. Bij slecht weer gaat de boot niet, dus zo zit je nergens aan vast (~€65 p.p. incl. lunch).", "lat": -17.02, "lon": 49.85, "icon": "<svg viewBox=\"-13 -13 26 26\" class=\"ic\"><path d=\"M-9,1.5 Q-9,-4 -1,-4 Q6,-4 7.6,0.6 Q8,3.6 1,4 Q-9,5 -9,1.5 Z\" fill=\"#456a82\"/><path d=\"M7,0.6 L12,-3 L10.6,0.6 L12,4.2 Z\" fill=\"#456a82\"/><circle cx=\"-5.2\" cy=\"-0.6\" r=\"0.85\" fill=\"#fff\"/><g stroke=\"#8fbdd8\" stroke-width=\"1.2\" stroke-linecap=\"round\"><path d=\"M-4,-4 L-5.5,-8\"/><path d=\"M-4,-4 L-3,-8\"/><path d=\"M-4,-4 L-4.3,-8.6\"/></g></svg>", "kind": "node", "nights": 3, "region": "eiland", "local": {"coast": "island", "pins": [{"name": "Hotel Ravoraha", "x": 50, "y": 60, "hotel": true, "q": "Hotel Ravoraha Sainte Marie"}, {"name": "Île aux Nattes", "x": 50, "y": 86, "q": "Ile aux Nattes Madagascar"}, {"name": "Piratenbegraafplaats", "x": 60, "y": 40, "q": "Sainte Marie Pirate Cemetery"}, {"name": "Baai", "x": 42, "y": 30, "q": "Baie de Sainte Marie"}, {"name": "Ambodifotatra", "x": 58, "y": 22, "q": "Ambodifotatra"}]}}];
 const PRACTICAL = {"title": "Praktisch ter plaatse", "intro": "De grote logistiek — internationale + binnenlandse vluchten, 4x4 met chauffeur-gids, alle hotels en de route — is geboekt en volledig betaald. Onderstaande regel je zelf ter plaatse: klein, meestal contant, en bewust níét vooraf. (Antwoorden van Myriam/Tsara, 30 mei 2026.)", "sections": [{"h": "Visum", "items": ["Koop bij aankomst op de luchthaven van Tana — €35 p.p., contant.", "e-Visum werkt NIET op Madagascar; vooraf online aanvragen heeft geen zin.", "Wisselgeld krijg je terug in Ariary."]}, {"h": "Walvistocht — Sainte-Marie (topprioriteit)", "items": ["NIET vooraf boeken: bij slecht weer vaart de boot niet, dus zit je niet vast aan een datum.", "Regel het ter plaatse via de hotelreceptie (programma dag 17–18).", "~€65 p.p. incl. lunch · juli is hét bultrug-seizoen."]}, {"h": "Parkgidsen", "items": ["Verplichte lokale ANGAP-gids aan de parkingang (o.a. Grande Tsingy, Andasibe) — niet in het pakket.", "Prijs hangt op een bord bij de ingang, afhankelijk van route/duur; contant ter plaatse.", "Je chauffeur helpt de juiste gids te regelen (zeg vooraf wat je wil zien)."]}, {"h": "Nachtexcursies", "items": ["Aye-Aye, Palmarium (~€10 p.p.) — bijna gegarandeerd, de dieren worden gevoerd. Bucketlist.", "Mitsinjo nachtwandeling, Andasibe (~€10 p.p.).", "Pereyras reptielenfarm, Andasibe (~€8 p.p.)."]}, {"h": "Cash & kaarten", "items": ["Neem ~€300–500 p.p. cash mee — pinautomaten zijn soms leeg of liggen plat bij stroomuitval.", "Euro's worden op de asfaltroutes vaak geaccepteerd in hotels/restaurants.", "Visa werkt in grote steden/toeristische plekken; Mastercard nauwelijks.", "ATM's o.a. in Tana, Morondava, Antsirabe en op Sainte-Marie."]}, {"h": "Fooien", "items": ["Chauffeur-gids: grove richtlijn ~€4+/dag (meer mag).", "Parkgidsen/crews: geen verplichting maar gebruikelijk, naar tevredenheid.", "Euro of Ariary maakt niet uit."]}, {"h": "Binnenlandse bagage (Madagascar Airlines)", "items": ["20 kg ruimbagage + 5 kg handbagage p.p.", "Extra handbagage: 15 kg = €20 / 23 kg (max) = €50.", "Vluchtschema's wijzigen soms ter plekke; Tsara bewaakt dit en schuift de rest mee."]}, {"h": "Vroege vertrekken", "items": ["Veel dagen starten vroeg (binnenlandse vluchten, lange 4x4-ritten). Vraag de avond ervoor aan de hotelreceptie een ontbijtpakketje voor onderweg.", "Speelt o.a. bij Tana→Morondava (vlucht 08:00), de heen- en terugrit Morondava↔Bekopaka en de Baobab-zonsopkomst."]}]};
 const PACKLIST = {"title": "Paklijst", "intro": "Afgestemd op déze route: hooglandkou in juli, lange 4x4-dagen, boottransfers, nachtexcursies en alles met cash. Pak licht en compact — je zit veel in de auto en op boten.", "sections": [{"h": "🪪 Documenten & geld", "items": ["Geldig paspoort — Myriam's enige échte 'must' om vooraf te checken.", "€35 p.p. visumgeld, contant en klaar vóór de paspoortcontrole.", "€300–500 p.p. cash extra — pinautomaten vallen soms uit bij stroomuitval.", "Visa-kaart (werkt beter dan Mastercard) + kopie reisverzekering (Globality medisch + AG Familis)."]}, {"h": "🧥 Kleding", "items": ["Warme laag + lange broek voor de hooglandnachten (Antsirabe, juli kan koud zijn).", "Stevige wandelschoenen met grip — klimmen en hangbruggen in de Grande Tsingy.", "Lichte kleding + regenjas/poncho voor de vochtige oostkust en het eiland.", "Zwemkleding, hoed/pet en zonnebril."]}, {"h": "💊 Gezondheid", "items": ["Anti-muggenspray (DEET) + malariaprofylaxe; muggennetten hangen in de lodges.", "Pillen tegen zeeziekte voor de boot Mahambo→Sainte-Marie (~4,5 u).", "Klein EHBO-setje, ORS, zonnebrand. Gele-koortsboekje meenemen."]}, {"h": "🔦 Gear", "items": ["Hoofdlamp/zaklamp — nachtexcursies (Aye-Aye, Mitsinjo) én stroomuitval.", "Verrekijker voor lemuren en de bultruggen.", "Powerbank + reisstekker (type C/E, 220V).", "Droogzak of ziplocks voor de boottransfers."]}, {"h": "🎒 Onderweg", "items": ["Vraag de avond ervoor een ontbijtpakket voor vroege vertrekken.", "Snacks + water voor de lange 4x4-dagen (tot ~10 u richting Bekopaka).", "Kleingeld voor fooien klaar (chauffeur-gids ~€4+/dag)."]}]};
 const REGION_COLORS = {"hub": "#b3261e", "west": "#b07a2e", "hoogland": "#7a8a3a", "oost": "#2f8f6f", "eiland": "#2f6fd0"};
@@ -290,6 +309,10 @@ const practicalEl = document.getElementById('practical');
 const packlistEl = document.getElementById('packlist');
 const infoBtn = document.getElementById('infobtn');
 const packBtn = document.getElementById('packbtn');
+const natmapEl = document.getElementById('natmap');
+const localwrapEl = document.getElementById('localwrap');
+const localsvgEl = document.getElementById('localsvg');
+const lmHeadEl = document.getElementById('lm-head');
 
 function nightsLabel(n) {
   if (!n || n < 1) return '';
@@ -314,6 +337,74 @@ function actIcon(t) {
   for (const [re, ic] of m) if (re.test(x)) return ic;
   return '📍';
 }
+
+function esc(t) { return (t || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+function buildLocal(s) {
+  const L = s.local || {};
+  const pins = L.pins || [];
+  const W = 360, H = 360;
+  const coast = L.coast || '';
+  const px = p => p.x / 100 * W, py = p => p.y / 100 * H;
+  function wave(xb) {
+    let d = `M${xb},0`;
+    for (let y = 0; y <= H; y += 24) d += ` L${(xb + Math.sin(y / 26) * 8).toFixed(1)},${y}`;
+    return d;
+  }
+  let bg = '';
+  if (coast === 'east' || coast === 'island') {
+    const xb = coast === 'island' ? 316 : 290;
+    bg += `<path d="${wave(xb)} L${W},${H} L${W},0 Z" fill="#a9d4dd"/>`;
+  }
+  if (coast === 'west' || coast === 'island') {
+    const xb = coast === 'island' ? 44 : 70;
+    bg += `<path d="${wave(xb)} L0,${H} L0,0 Z" fill="#a9d4dd"/>`;
+  }
+  bg += '<g fill="none" stroke="#00000010" stroke-width="2">';
+  for (let i = 1; i <= 3; i++) { const yy = i * 90; bg += `<path d="M20,${yy} Q180,${yy - 34} 340,${yy}"/>`; }
+  bg += '</g>';
+  let labels = '', dots = '';
+  pins.forEach(p => {
+    const x = px(p), y = py(p), hotel = !!p.hotel;
+    const col = hotel ? '#b3261e' : (REGION_COLORS[s.region] || '#33415c');
+    const ic = hotel ? '🏠' : actIcon((p.name || '') + ' ' + (p.note || ''));
+    const q = p.q || (p.name + ', ' + s.name + ', Madagascar');
+    const right = x < W * 0.5;
+    const lw = (p.name || '').length * 6.1 + 12;
+    let rx = right ? x + 15 : x - 15 - lw;
+    rx = Math.max(3, Math.min(W - lw - 3, rx));
+    const ry = Math.max(11, Math.min(H - 23, y - 11));
+    labels += `<g class="lmpin" data-q="${esc(q)}">`
+      + `<rect x="${rx.toFixed(1)}" y="${ry.toFixed(1)}" width="${lw.toFixed(1)}" height="22" rx="6" fill="#f6ecd4" fill-opacity="0.93" stroke="${col}" stroke-width="1"/>`
+      + `<text x="${(rx + lw / 2).toFixed(1)}" y="${(ry + 15).toFixed(1)}" font-size="11" font-weight="600" fill="#43301c" text-anchor="middle">${esc(p.name)}</text></g>`;
+    dots += `<g class="lmpin" data-q="${esc(q)}">`
+      + `<circle class="lmdot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="12" fill="${col}" stroke="#f6ecd4" stroke-width="2"/>`
+      + `<text x="${x.toFixed(1)}" y="${(y + 4.5).toFixed(1)}" font-size="13" text-anchor="middle">${ic}</text></g>`;
+  });
+  return bg + labels + dots;
+}
+
+function showLocal(s) {
+  const pins = (s.local && s.local.pins) || [];
+  if (!pins.length) { hideLocal(); return; }
+  lmHeadEl.textContent = s.name + ' — ter plaatse';
+  localsvgEl.innerHTML = buildLocal(s);
+  natmapEl.style.display = 'none';
+  localwrapEl.style.display = 'block';
+}
+
+function hideLocal() {
+  natmapEl.style.display = '';
+  localwrapEl.style.display = 'none';
+}
+
+localsvgEl.addEventListener('click', e => {
+  const g = e.target.closest('.lmpin');
+  if (!g) return;
+  const q = g.getAttribute('data-q');
+  window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q), '_blank', 'noopener');
+});
+document.getElementById('lm-back').addEventListener('click', showIndex);
 
 // build index list
 for (const s of STOPS) {
@@ -380,6 +471,7 @@ function select(id) {
   if (g) g.setAttribute('opacity','1');
   const stopG = document.querySelector(`#mapsvg .stop[data-id="${id}"]`);
   if (stopG) stopG.classList.add('sel');
+  showLocal(s);
 }
 
 function showPractical() {
@@ -401,6 +493,7 @@ function showPractical() {
   infoBtn.style.display = 'none';
   packBtn.style.display = 'none';
   clearHalos();
+  hideLocal();
 }
 
 function showPacklist() {
@@ -422,6 +515,7 @@ function showPacklist() {
   infoBtn.style.display = 'none';
   packBtn.style.display = 'none';
   clearHalos();
+  hideLocal();
 }
 
 function showIndex() {
@@ -432,6 +526,7 @@ function showIndex() {
   infoBtn.style.display = '';
   packBtn.style.display = '';
   clearHalos();
+  hideLocal();
 }
 
 document.getElementById('back').addEventListener('click', showIndex);
