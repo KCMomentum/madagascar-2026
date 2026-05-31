@@ -1,4 +1,4 @@
-const CACHE = 'mad-2026-05-31-175050';
+const CACHE = 'mad-2026-05-31-181341';
 const ASSETS = [
   'index.html',
   'manifest.json',
