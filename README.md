@@ -1,7 +1,7 @@
 # Madagascar 2026 — offline reisroute
 
 Interactive, fully offline travel map for the Madagascar trip (Kilian & Karian,
-28 jun – 19 jul 2026). It's a Progressive Web App (PWA): a single web page that
+29 jun – 19 jul 2026). It's a Progressive Web App (PWA): a single web page that
 installs to your home screen and works with no signal once loaded.
 
 **Live URL:** https://kcmomentum.github.io/madagascar-2026/
