@@ -154,6 +154,19 @@
     background:#fffaf0; border:1px solid #0001; border-radius:9px;
     padding:14px 15px; margin:0;
   }
+  ul.pklist { list-style:none; margin:6px 0 0; padding-left:0; }
+  ul.pklist li { margin:0; }
+  .pkitem {
+    display:flex; gap:10px; align-items:flex-start; padding:6px 2px;
+    font-size:13.5px; line-height:1.38; color:#3a2f1c; cursor:pointer;
+    border-bottom:1px solid #0000000d;
+  }
+  .pkitem input {
+    margin:1px 0 0; flex:0 0 auto; width:18px; height:18px;
+    accent-color:#7c9c5e; cursor:pointer;
+  }
+  .pkitem span { flex:1; }
+  .pkitem.done span { text-decoration:line-through; color:#a89a7c; }
   .foot { margin-top:18px; font-size:11.5px; color:#8a7650; font-style:italic; }
   #localwrap { display:none; }
   #localsvg { width:100%; height:auto; display:block; border:2px solid var(--ink);
@@ -595,16 +608,49 @@ function showPractical() {
   hideLocal();
 }
 
+function loadPack() {
+  try { return JSON.parse(localStorage.getItem('madaPack') || '{}'); }
+  catch (e) { return {}; }
+}
+function savePack(o) {
+  try { localStorage.setItem('madaPack', JSON.stringify(o)); } catch (e) {}
+}
+
 function showPacklist() {
   document.getElementById('pk-title').textContent = PACKLIST.title || 'Paklijst';
   document.getElementById('pk-intro').textContent = PACKLIST.intro || '';
   const secs = document.getElementById('pk-secs');
   secs.innerHTML = '';
+  const checked = loadPack();
   for (const sec of (PACKLIST.sections || [])) {
     const d = document.createElement('div');
     d.className = 'psec';
-    const ul = (sec.items || []).map(i => `<li>${i}</li>`).join('');
-    d.innerHTML = `<h3>${sec.h}</h3><ul>${ul}</ul>`;
+    const h = document.createElement('h3');
+    h.textContent = sec.h;
+    d.appendChild(h);
+    const ul = document.createElement('ul');
+    ul.className = 'pklist';
+    for (const item of (sec.items || [])) {
+      const key = sec.h + '::' + item;
+      const li = document.createElement('li');
+      const label = document.createElement('label');
+      label.className = 'pkitem' + (checked[key] ? ' done' : '');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = !!checked[key];
+      const span = document.createElement('span');
+      span.textContent = item;
+      cb.addEventListener('change', () => {
+        if (cb.checked) { checked[key] = 1; } else { delete checked[key]; }
+        savePack(checked);
+        label.classList.toggle('done', cb.checked);
+      });
+      label.appendChild(cb);
+      label.appendChild(span);
+      li.appendChild(label);
+      ul.appendChild(li);
+    }
+    d.appendChild(ul);
     secs.appendChild(d);
   }
   packlistEl.className = 'practical show';
