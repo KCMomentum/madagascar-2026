@@ -11,8 +11,9 @@ REPO="$HOME/Documents/madagascar-pwa"
 cd "$VAULT/_build"
 uv run python madagascar_interactive.py
 
-# 2. Copy the fresh map into the site as index.html
+# 2. Copy the fresh map + documents into the site
 cp "$VAULT/Reisroute-interactief.html" "$REPO/index.html"
+cp "$VAULT/docs.json" "$REPO/docs.json"
 
 # 3. Bump the service-worker cache version (this is what makes phones refresh)
 VER="mad-$(date +%Y-%m-%d-%H%M%S)"
@@ -20,7 +21,7 @@ cd "$REPO"
 sed -i '' "s/^const CACHE = .*/const CACHE = '$VER';/" sw.js
 
 # 4. Publish
-git add index.html sw.js
+git add index.html docs.json sw.js
 git commit -q -m "Update map ($VER)"
 git push -q
 
