@@ -171,19 +171,21 @@
   #localwrap { display:none; }
   #natmap { position:relative; }
   .nbojump {
-    position:absolute; top:6px; left:6px; z-index:5;
+    position:absolute; top:12px; left:12px; z-index:5;
     display:flex; flex-direction:column; align-items:center; gap:0;
     background:none; border:none; padding:4px 6px; cursor:pointer;
     font-family:Georgia,'Times New Roman',serif; font-weight:700;
-    font-size:12.5px; letter-spacing:0.3px; color:var(--ink);
+    font-size:13.5px; letter-spacing:0.3px; color:var(--ink);
     text-shadow:0 0 4px var(--cream), 0 0 4px var(--cream), 0 1px 1px var(--cream);
   }
-  .nbojump .nboarrow { filter:drop-shadow(0 0 2px var(--cream)) drop-shadow(0 0 2px var(--cream)); margin-bottom:-2px; }
-  .nbojump .nboarrow line { stroke:var(--ink); stroke-width:3.2; stroke-linecap:round; }
-  .nbojump .nboarrow polygon { fill:var(--ink); stroke:var(--ink); stroke-width:1; stroke-linejoin:round; }
+  .nbojump .nboarrow {
+    fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;
+    filter:drop-shadow(0 0 2px var(--cream)) drop-shadow(0 0 2px var(--cream)); margin-bottom:-3px;
+  }
+  .nbojump .nboarrow .head { fill:var(--ink); }
   .nbojump:hover { color:#000; }
-  .nbojump:hover .nboarrow line { stroke:#000; }
-  .nbojump:hover .nboarrow polygon { fill:#000; stroke:#000; }
+  .nbojump:hover .nboarrow { stroke:#000; }
+  .nbojump:hover .nboarrow .head { fill:#000; }
   .nbojump:active { transform:translate(-1px,-1px); }
   #localsvg { width:100%; height:auto; display:block; border:2px solid var(--ink);
     border-radius:10px; background:#cdba8e; }
@@ -209,9 +211,12 @@
   <div class="mapcol">
     <div id="natmap">
       <button id="nbo-jump" class="nbojump" title="Naar de Nairobi-tussenstop" aria-label="Naar de Nairobi-tussenstop">
-        <svg class="nboarrow" viewBox="0 0 30 30" width="34" height="34" aria-hidden="true">
-          <line x1="24" y1="24" x2="11" y2="11"/>
-          <polygon points="5.5,5.5 17,8.5 11,11 8.5,17"/>
+        <svg class="nboarrow" viewBox="0 0 64 64" width="62" height="62" aria-hidden="true">
+          <line x1="55" y1="55" x2="19" y2="19" stroke-width="3.4"/>
+          <polygon class="head" points="9,9 27,15 18,18 15,27"/>
+          <path d="M37,43 L43,43 L43,37" stroke-width="2.8"/>
+          <path d="M43,49 L49,49 L49,43" stroke-width="2.8"/>
+          <path d="M49,55 L55,55 L55,49" stroke-width="2.8"/>
         </svg>
         <span>naar Nairobi</span>
       </button>
